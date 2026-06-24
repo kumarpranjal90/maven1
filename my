@@ -1,0 +1,10 @@
+---
+- name: Deploy Maven Artifact
+  hosts: local
+
+  tasks:
+    - name: Copy artifact
+      copy:
+        src: "/mnt/c/ProgramData/Jenkins/.jenkins/workspace/hello/pd1/myapp/target/myapp-1.0-SNAPSHOT.jar"
+        dest: "/mnt/c/Deployment/pd1/myapp/target/"
+mkdir -p /mnt/c/Deployment
