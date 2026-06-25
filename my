@@ -1,12 +1,22 @@
+mkdir ~/ansible-demo
+cd ~/ansible-demo
+[local]
+localhost ansible_connection=local
+ls /mnt/c/ProgramData/Jenkins/.jenkins/workspace/hello/pd1/myapp/target/
 ---
-- name: Deploy Maven Artifact
+- name: Deploy Java Application
   hosts: local
+  become: false
 
   tasks:
-    - name: Copy artifact
+
+    - name: Copy JAR
       copy:
-        src: "/mnt/c/ProgramData/Jenkins/.jenkins/workspace/hello/pd1/myapp/target/myapp-1.0-SNAPSHOT.jar"
-        dest: "/mnt/c/Deployment/pd1/myapp/target/"
-mkdir -p /mnt/c/Deployment
-ansible-playbook -i ~/hosts.ini ~/deploy.yml
-ls -l /mnt/c/Deployment
+        src: /mnt/c/ProgramData/Jenkins/.jenkins/workspace/hello/pd1/myapp/target/myapp-1.0-SNAPSHOT.jar
+        dest: /home/YOUR_USERNAME/myapp.jar
+        mode: '0755'
+
+    - name: Run JAR
+      shell: nohup java -jar /home/YOUR_USERNAME/myapp.jar > app.log 2>&1 &
+ansible-playbook -i inventory.ini deploy.yml
+cat app.log
